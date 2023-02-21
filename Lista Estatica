@@ -1,0 +1,315 @@
+#include <iostream>
+#include "Lista.h"
+#include "Mamifero.h"
+#define TAM 50
+
+using namespace std;
+
+class Lista{
+private:
+    GatoDomestico datos[TAM];
+    int ult;
+public:
+    Lista():ult(-1){}
+    bool vacia()const;
+    bool llena()const;
+    bool inserta(GatoDomestico , int);
+    bool elimina(int);
+    GatoDomestico recupera(int)const;
+    int primero()const;
+    int ultimo()const;
+    void imprime()const;
+    int buscar(GatoDomestico);
+    void Agregar(GatoDomestico element);
+};
+class Mamifero{
+private:
+    string nombre;
+    string dieta;
+public:
+    string getNombre() const;
+    void setNombre(const string &value);
+
+    string getDieta() const;
+    void setDieta(const string &value);
+
+    void imprimirDieta(const string &value);
+
+    friend Mamifero& operator +(Mamifero &x, Mamifero &y){
+        x.nombre=x.nombre+y.nombre;
+        x.dieta=x.dieta+y.dieta;
+
+        return x;
+    }
+    friend ostream& operator<<(ostream& os, Mamifero ms){
+        os<<ms.nombre<<" "<<ms.dieta<<endl;
+        return os;
+    }
+
+    Mamifero& operator=(Mamifero &x){
+        nombre=x.nombre;
+        return *this;
+    }
+
+    bool operator ==(const Mamifero &value) const{
+        return this->nombre == value.nombre && this->dieta == value.dieta;
+    }
+
+};
+
+class Felino:public Mamifero{
+private:
+
+    string raza;
+    string lugarNacimiento;
+    string nombreCirco;
+    int anoNacimiento;
+
+public:
+
+    string getRaza() const;
+    void setRaza(const string &value);
+
+    string getLugarNacimiento() const;
+    void setLugarNacimiento(const string &value);
+
+    string getNombreCirco() const;
+    void setNombreCirco(const string &value);
+
+    int getAnoNacimiento() const;
+    void setAnoNacimiento(const int &value);
+
+    void ImprimirLugarNacimiento(const string &value);
+    void ImprimirAnoNacimiento(const int value);
+    void ImprimirRaza(const string &value);
+
+};
+
+class GatoDomestico: public Felino{
+
+private:
+    string nombreDueno;
+
+public:
+    string getNombreDueno() const;
+    void setNombredueno(const string &value);
+
+    void cambiarNombre();
+
+};
+
+
+int Lista::buscar(GatoDomestico elem){
+    int i=0;
+    while(i<=ult){
+        if(elem==datos[i]){
+            cout<<i;
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
+void Lista::imprime()const{
+    if(!vacia()){
+        for(int i=0; i<=ult; i++){
+            std::cout<<datos[i]<<std::endl;
+        }
+    }
+}
+
+bool Lista::vacia()const{
+    return ult==-1;
+}
+bool Lista::llena()const{
+    return ult==TAM-1;
+}
+
+bool Lista::inserta(GatoDomestico elem, int pos){
+    if(llena() || pos<0 || pos>ult+1){
+        std::cout<<"\n No se pudo insertar";
+        return false;
+    }
+    int i=ult+1;
+    while(i>pos){
+        datos[i]=datos[i-1];
+        i--;
+    }
+    datos[pos]=elem;
+    ult++;
+    return true;
+}
+
+bool Lista::elimina(int pos){
+    if(vacia() || pos<0 || pos>ult-1){
+        std::cout<<"\n No se pudo eliminar";
+        return false;
+    }
+    int i=pos;
+    while(i<ult){
+        datos[i]=datos[i+1];
+        i++;
+    }
+    ult--;
+    return true;
+}
+
+GatoDomestico Lista::recupera(int pos)const{
+    if(vacia() || pos<0 || pos>ult-1){
+        std::cout<<"\n Insuficiencia de datos";
+    }
+    else{
+       return datos[pos];
+    }
+}
+
+int Lista::primero()const{
+    if(vacia()){
+       return -1;
+    }
+    return 0;
+}
+int Lista::ultimo()const{
+    if(vacia()){
+       return -1;
+    }
+    return ult;
+}
+
+void Lista::Agregar(GatoDomestico element){
+
+    if(llena()){
+        std::cout<<"\n No se pudo insertar";
+    }
+    for(int i=ult; i> 0; --i){
+        datos[i]=datos[i-1];
+    }
+    datos[0]=element;
+    ult++;
+
+}
+void Mamifero::setNombre(const string &value){
+    nombre=value;
+}
+void Felino::setRaza(const string &value){
+    raza=value;
+}
+void Mamifero::setDieta(const string &value){
+    dieta=value;
+}
+void Felino::setLugarNacimiento(const string &value){
+    lugarNacimiento=value;
+}
+void Felino::setAnoNacimiento(const int &value){
+    anoNacimiento=value;
+}
+void Felino::setNombreCirco(const string &value){
+    nombreCirco=value;
+}
+void GatoDomestico::setNombredueno(const string &value){
+    nombreDueno=value;
+}
+
+string Mamifero::getNombre() const{
+    return nombre;
+}
+string Felino::getRaza() const{
+    return raza;
+}
+string Mamifero::getDieta() const{
+    return dieta;
+}
+string Felino::getLugarNacimiento() const{
+    return lugarNacimiento;
+}
+int Felino::getAnoNacimiento()const{
+    return anoNacimiento;
+}
+string Felino::getNombreCirco()const{
+    return nombreCirco;
+}
+
+string GatoDomestico::getNombreDueno()const{
+    return nombreDueno;
+}
+
+void Mamifero::imprimirDieta(const string &value){
+    cout << "La dieta es: "<<value;
+}
+void Felino::ImprimirLugarNacimiento(const string &value){
+    cout << "Lugar de  nacimiento: "<<value;
+}
+
+void Felino::ImprimirAnoNacimiento(const int value){
+    cout << "Año de nacimiento: "<<value;
+}
+void Felino::ImprimirRaza(const string &value){
+   cout << "Raza: "<<value;
+}
+
+int main()
+{
+    char bandera;
+    int opc, intAux;
+    string aux;
+    GatoDomestico Minino;
+    Lista MiLista;
+
+    Minino.setNombre("Pancho");
+
+    do{
+        system("cls");
+        cout<<"Herencia y sobreacarga de operadores"<<endl<<endl;
+        cout<<"1)Agregar"<<endl;
+        cout<<"2)Buscar"<<endl;
+        cout<<"3)Eliminar"<<endl;
+        cout<<"4)Insertar"<<endl;
+        cout<<"5)Mostrar"<<endl;
+        cout<<"6)Salir"<<endl;
+        cout<<"Respuesta:";
+        cin>>opc;
+        switch(opc){
+        case 1:
+            cout<<"Ingrese los datos"<<endl;
+            cout<<"Nombre del gato:"<<endl;
+            cin>>aux;
+            Minino.setNombre(aux);
+            MiLista.Agregar(Minino);
+            cout<<"Datos recopilados con exito"<<endl;
+            break;
+        case 2:
+            cout<<"Nombre del gato a buscar:";
+            cin>>aux;
+            Minino.setNombre(aux);
+            MiLista.buscar(Minino);
+            break;
+        case 3:
+            cout<<"Nombre del gato a eliminar:";
+            cin>>aux;
+            Minino.setNombre(aux);
+            MiLista.elimina(MiLista.buscar(Minino));
+            break;
+        case 4:
+            cout<<"Ingrese los datos"<<endl;
+            cout<<"Nombre del gato:"<<endl;
+            cin>>aux;
+            Minino.setNombre(aux);
+            cout<<"Posicion en la que lo desea agregar:"<<endl;
+            cin>>intAux;
+            MiLista.inserta(Minino,intAux);
+            cout<<"Datos recopilados con exito"<<endl;
+            break;
+        case 5:
+            system("cls");
+            MiLista.imprime();
+            break;
+        default:
+            break;
+
+        }
+
+    cout << "¿Repetir programa? (S/N)"<<endl;
+    cin  >> bandera;
+    }while(bandera=='s'||bandera=='S');
+}
